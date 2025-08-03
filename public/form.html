@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="netlify" content="true">
+  <title>Formularz zamówienia CV</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2c7be5;
+      --accent: #ff5722;
+      --background: linear-gradient(to right, #e3f2fd, #f9fbfe);
+      --text: #222;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: var(--background);
+      color: var(--text);
+      padding: 2rem 1rem;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--primary);
+    }
+    form {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      max-width: 700px;
+      margin: auto;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+    form h2 {
+      text-align: center;
+      margin-top: 0;
+      color: var(--primary);
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.3rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: 'Montserrat', sans-serif;
+    }
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    input[type="checkbox"] {
+      width: auto;
+      margin-right: 0.5rem;
+    }
+    button {
+      margin-top: 2rem;
+      padding: 1rem 2rem;
+      background: linear-gradient(to right, #ff512f, #dd2476);
+      color: white;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+    button:hover {
+      transform: scale(1.03);
+      background: linear-gradient(to right, #ff6b3d, #f13d83);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📝 Formularz zamówienia CV</h1>
+  
+  <form method="POST" action="generate.php" enctype="application/x-www-form-urlencoded">
+
+    <h2>Wypełnij formularz</h2>
+
+    <label>Imię i nazwisko*  
+      <input type="text" name="name" required>
+    </label>
+
+    <label>E-mail (na który wyślemy CV)*  
+      <input type="email" name="email" required>
+    </label>
+
+    <label>Telefon (opcjonalnie)  
+      <input type="tel" name="phone">
+    </label>
+
+    <label>Na jakie stanowisko aplikujesz?*  
+      <input type="text" name="position" required>
+    </label>
+
+    <label>Doświadczenie zawodowe (w punktach)*  
+      <textarea name="experience" required></textarea>
+    </label>
+
+    <label>Wykształcenie*  
+      <input type="text" name="education" required>
+    </label>
+
+    <label>Umiejętności*  
+      <input type="text" name="skills" required>
+    </label>
+
+    <label>Znajomość języków*  
+      <input type="text" name="languages" required>
+    </label>
+
+    <label>Dodatkowe informacje (opcjonalnie)  
+      <textarea name="extra_info"></textarea>
+    </label>
+
+    <label>
+      <input type="checkbox" name="rodo" value="accepted" required>
+      Wyrażam zgodę na przetwarzanie danych osobowych w celu wykonania CV.*
+    </label>
+
+    <label>Wybierz styl CV*  
+      <select name="style" required>
+        <option value="Nowoczesne">Nowoczesne</option>
+        <option value="Klasyczne">Klasyczne</option>
+        <option value="Techniczne">Techniczne</option>
+      </select>
+    </label>
+
+    <button type="submit">Wyślij</button>
+  </form>
+
+</body>
+</html>

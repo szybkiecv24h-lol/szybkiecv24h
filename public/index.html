@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🔥 CV w 24h – Tylko 15 zł 🔥</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2c7be5;
+      --accent: #ff5722;
+      --background: linear-gradient(to right, #e3f2fd, #f9fbfe);
+      --text: #222;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: var(--background);
+      color: var(--text);
+    }
+    header {
+      background: radial-gradient(circle at top, #2c7be5, #174ea6);
+      color: white;
+      padding: 4rem 1rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .logo-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .logo-title img {
+      height: 100px;
+      filter: drop-shadow(0 0 6px white) brightness(1.3);
+      background: white;
+      border-radius: 10px;
+      padding: 6px;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      margin: 0.5rem 0;
+    }
+    .hero p {
+      font-size: 1.3rem;
+      margin: 0;
+      font-weight: 500;
+    }
+    nav {
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.07);
+    }
+    nav a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 3rem 1rem;
+      display: grid;
+      gap: 2rem;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      position: relative;
+    }
+    .card h2 {
+      margin-top: 0;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card h2 i {
+      color: var(--accent);
+    }
+    .card ul {
+      padding-left: 1.5rem;
+    }
+    .card ul li {
+      margin-bottom: 0.75rem;
+      font-size: 1.1rem;
+    }
+    .cta {
+      text-align: center;
+    }
+    .cta a {
+      background: linear-gradient(to right, #ff512f, #dd2476);
+      color: white;
+      padding: 1rem 2.5rem;
+      font-size: 1.4rem;
+      text-decoration: none;
+      border-radius: 50px;
+      display: inline-block;
+      font-weight: bold;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+    .cta a:hover {
+      transform: scale(1.05);
+      background: linear-gradient(to right, #ff6b3d, #f13d83);
+    }
+    footer {
+      background: #263238;
+      color: #fff;
+      text-align: center;
+      font-size: 0.95rem;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+    }
+    footer a {
+      color: #90caf9;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-title">
+      <img src="logo.png" alt="Logo CV 24h" />
+      <div class="hero">
+        <h1><i class="fas fa-rocket"></i> CV w 24h – tylko 15 zł!</h1>
+        <p>🚀 Gotowe w jeden dzień – prosto, szybko i profesjonalnie!</p>
+      </div>
+    </div>
+  </header>
+
+  <nav>
+    <a href="index.html"><i class="fas fa-home"></i> Strona główna</a>
+    <a href="regulamin.html"><i class="fas fa-file-alt"></i> Regulamin</a>
+  </nav>
+
+  <main class="container">
+    <div class="card">
+      <h2><i class="fas fa-check-circle"></i> Co otrzymujesz?</h2>
+      <ul>
+        <li><i class="fas fa-star"></i> Nowoczesne, klasyczne lub techniczne CV – do wyboru</li>
+        <li><i class="fas fa-clock"></i> Plik PDF dostarczony w ciągu 24 godzin</li>
+        <li><i class="fas fa-brain"></i> Tworzone przy wsparciu sztucznej inteligencji</li>
+        <li><i class="fas fa-pen"></i> Wystarczy tylko wypełnić formularz – resztą zajmujemy się my!</li>
+      </ul>
+    </div>
+
+    <div class="card cta">
+      <a href="form.html">Zamów teraz!</a>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 szybkiecv24h.pl – Wszystkie prawa zastrzeżone. <br>
+    <a href="mailto:szybkiecv24h@gmail.com">📧 szybkiecv24h@gmail.com</a>
+  </footer>
+
+</body>
+</html>
