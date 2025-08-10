@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formularz zamówienia CV</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+
+/* --- Form field layout hardening --- */
+.form .field, .field {display:block; width:100%; margin-bottom:14px}
+.form label, label {display:block; font-weight:600; margin-bottom:6px}
+.form input[type="text"], 
+.form input[type="email"], 
+.form input[type="tel"], 
+.form input[type="file"], 
+.form select, 
+.form textarea,
+input[type="text"], input[type="email"], input[type="tel"], input[type="file"], select, textarea {
+  display:block; width:100%; max-width:100%;
+}
+textarea{min-height:100px}
+.grid{display:grid; gap:12px}
+
+
+
+/* --- Layout polish for left column vs fixed preview --- */
+@media (min-width: 1025px){
+  .container{position:relative}
+  .container .card{width:100%}
+  form .row, form .field, form label, form input, form textarea, form select{max-width:100%}
+}
+
+
+
+/* --- Fixed right preview --- */
+@media (min-width: 1025px){
+  body{padding-right: calc(min(48vw, 560px) + 24px);}
+  .fixed-preview-panel{
+    position: fixed; right: 16px; top: 16px;
+    width: min(48vw, 560px); height: calc(100vh - 32px);
+    z-index: 50;
+  }
+  .fixed-preview-panel .preview-card{height:100%; display:flex; flex-direction:column}
+  .fixed-preview-panel #livePreviewFixed{flex:1; min-height:520px}
+  /* hide old inline preview card */
+  .container .card + .card{display:none}
+}
+@media (max-width: 1024px){
+  .fixed-preview-panel{display:none}
+}
+
+
+
+/* --- Two-column layout with sticky preview --- */
+/* === FIX PACK v18-left-column ===
+   - Remove duplicate .container max-width=920px
+   - Harden two-column grid
+   - Prevent overlaps and ensure wrapping
+   - Keep Montserrat font
+=== */
+.layout{display:grid;grid-template-columns:minmax(640px,1fr) minmax(420px,48%);gap:24px;align-items:start}
+@media (max-width:1200px){.layout{grid-template-columns:minmax(640px,1fr) minmax(380px,48%)}}
+@media (max-width:1024px){.layout{grid-template-columns:1fr}}
+.left-pane{min-width:0} /* allow grid item to shrink */
+.left-pane form{display:grid;gap:16px}
+.left-pane form .row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:900px){.left-pane form .row{grid-template-columns:1fr}}
+.left-pane .field, .left-pane label, .left-pane input, .left-pane textarea, .left-pane select{max-width:100%}
+.left-pane input, .left-pane textarea, .left-pane select{min-width:0}
+.left-pane .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+.left-pane .actions .btn{flex:0 0 auto}
+.left-pane *{word-break:break-word} /* long strings won't overflow */
+.fixed-aside{position:sticky;top:16px;height:calc(100vh - 32px);z-index:5}
+.preview-card{display:flex;flex-direction:column;height:100%}
+#livePreviewFixed{flex:1;min-height:540px;overflow:hidden}
+/* Ensure any absolute positioned badges don't cover fields */
+.badge{position:relative}
+/* Buttons do not overlap floating elements */
+button, .btn{position:relative}
+
+/* Nested rows should not split into two narrow columns */
+.left-pane form .row .row{grid-template-columns:1fr !important}
+.left-pane form .row .row .row{grid-template-columns:1fr !important}
+/* Default .row to one column on narrow widths */
+@media (max-width:1200px){
+  .left-pane form .row{grid-template-columns:1fr}
+}
+
+/* === END FIX PACK === */
+
+.container{max-width:1240px;margin:0 auto;padding:24px 16px}
+.layout{display:grid;grid-template-columns:minmax(640px,1fr) minmax(420px,48%);gap:20px;align-items:start}
+.fixed-aside{position:sticky;top:16px;height:calc(100vh - 32px)}
+.preview-card{height:100%;display:flex;flex-direction:column}
+#livePreviewFixed{flex:1;min-height:520px}
+@media (max-width: 1024px){
+  .layout{grid-template-columns:1fr}
+  .fixed-aside{position:relative;top:auto;height:auto}
+}
+/* Hide the old preview card (the second .card) on desktop */
+@media (min-width:1025px){
+  .container .card + .card{display:none}
+}
+
+
+    :root{
+      --primary:#2c7be5; --ink:#111827; --muted:#6b7280; --bg:#f7fbff; --card:#fff; --ring:rgba(44,123,229,.15);
+      --border:#e5e7eb; --success:#16a34a; --error:#ef4444;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto;background:var(--bg);color:var(--ink)}
+    /* removed duplicate container rule to prevent layout squish */
+    .card{background:var(--card);border:1px solid var(--border);border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.06);padding:24px}
+    h1{font-size:28px;margin:0 0 8px}
+    p.lead{color:var(--muted);margin:0 0 18px}
+    form{display:grid;gap:16px}
+    .row{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
+    @media (max-width:900px){.row{grid-template-columns:1fr}}
+    label{font-weight:600}
+    input, select, textarea{width:100%; padding:12px 14px; border:1px solid var(--border); border-radius:12px; background:#fff; font:inherit}
+    input:focus, select:focus, textarea:focus{outline:none; box-shadow:0 0 0 4px var(--ring); border-color:var(--primary)}
+    textarea{min-height:120px; resize:vertical}
+    .hint{font-size:12px;color:var(--muted);margin-top:6px}
+    .btn{background:var(--primary);color:#fff;border:0;padding:14px 20px;border-radius:12px;font-weight:700;cursor:pointer;display:inline-flex;gap:8px;align-items:center;box-shadow:0 6px 18px var(--ring)}
+    .btn[disabled]{opacity:.6;cursor:progress}
+    .legend{font-size:14px;color:var(--muted);margin-bottom:6px}
+    .section-title{font-size:18px;margin:8px 0}
+    .divider{height:1px;background:#eef2f7;margin:4px 0 12px}
+    .req{color:#ef4444}
+    .note{font-size:12px;color:#6b7280}
+    .badge{display:inline-block;background:#eaf3ff;color:#1e40af;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}
+    #result{display:none;margin-top:12px;padding:12px;border-radius:12px}
+  /* live preview */
+    #livePreview .hdr{position:absolute;left:0;top:0;right:0;height:12%;background:#2c7be5;color:#fff;padding:10px 16px;display:flex;flex-direction:column;justify-content:center}
+    #livePreview .name{font-weight:700;font-size:20px}
+    #livePreview .role{opacity:.9;font-size:12px}
+    #livePreview .sidebar{position:absolute;right:0;top:12%;bottom:0;width:28%;background:#f0f6ff;border-left:1px solid #dbeafe;padding:10px 12px;overflow:auto}
+    #livePreview .main{position:absolute;left:0;top:12%;bottom:0;width:72%;padding:12px 14px;overflow:auto}
+    #livePreview h4{margin:8px 0 6px;font-size:12px;color:#2c7be5}
+    #livePreview .sec{margin-bottom:8px;border-top:1px solid #e5eef7;padding-top:6px}
+    #livePreview ul{margin:0 0 0 16px;padding:0}
+    #livePreview li{font-size:11px;margin:2px 0}
+    #livePreview .ph{width:100%;height:120px;border:1px dashed #dbeafe;background:repeating-linear-gradient(45deg,#eef6ff,#eef6ff 6px,#f8fbff 6px,#f8fbff 12px);border-radius:6px;display:grid;place-items:center;color:#99a3b0;font-size:12px}
+    
+/* --- Layout hardening for left column & prevent overflow --- */
+.left-pane{min-width:0}
+.left-pane .left-grid{display:block;max-width:100%}
+.left-pane .left-grid > div{min-width:0}
+.left-pane form{display:grid;gap:16px;width:100%}
+.left-pane form .row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:1200px){.left-pane form .row{grid-template-columns:1fr}}
+.left-pane input, .left-pane select, .left-pane textarea{width:100%;box-sizing:border-box}
+.container{max-width:1240px;margin:0 auto;padding:24px 16px}
+.layout{display:grid;grid-template-columns:minmax(640px,1fr) minmax(420px,48%);gap:20px;align-items:start}
+.card{overflow:hidden}
+label{white-space:nowrap} /* keep short labels on one line */
+
+
+/* --- Compact left panel form --- */
+.left-pane{font-size:14px}
+.left-pane h1{font-size:22px;margin-bottom:6px}
+.left-pane .section-title{font-size:16px}
+.left-pane input,
+.left-pane select,
+.left-pane textarea{
+  font-size:14px;
+  padding:8px 10px;
+  border-radius:8px;
+}
+.left-pane label{font-size:13px}
+.left-pane .hint{font-size:11px}
+.left-pane form{gap:10px}
+.left-pane form .row{gap:8px}
+.left-pane .divider{margin:2px 0 8px}
+.btn{padding:10px 14px;font-size:14px;border-radius:8px}
+
+
+/* === Compact mode for the left panel === */
+.left-pane{font-size:15px}
+.left-pane h1{font-size:24px;margin:0 0 6px}
+.left-pane .lead{font-size:13px}
+.left-pane .section-title{font-size:15px}
+.left-pane .badge{font-size:11px;padding:4px 8px;border-radius:10px}
+.left-pane form{gap:12px}
+.left-pane form .row{gap:10px}
+.left-pane label{font-size:14px;white-space:nowrap}
+.left-pane .hint{font-size:12px}
+.left-pane input,
+.left-pane select,
+.left-pane textarea{padding:9px 12px;border-radius:10px}
+.left-pane textarea{min-height:100px}
+/* radio/checkbox spacing */
+.left-pane input[type="radio"],
+.left-pane input[type="checkbox"]{transform:scale(.95)}
+/* kompaktowe odstępy sekcji */
+.left-pane .section{gap:10px}
+
+
+/* === Anti-overflow hard fix for left pane === */
+*,
+*::before,
+*::after{box-sizing:border-box}
+
+.card.left-pane{overflow:hidden}
+.card.left-pane > *{max-width:100%}
+
+.left-pane .row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.left-pane .row > div{min-width:0;max-width:100%}
+.left-pane .row > div > *{max-width:100%}
+
+.left-pane input,
+.left-pane select,
+.left-pane textarea{
+  display:block;
+  width:100%;
+  inline-size:100%;
+  max-width:100%;
+  box-sizing:border-box;
+}
+
+@media (max-width:1200px){
+  .left-pane .row{grid-template-columns:1fr}
+}
+
+
+/* --- Fix: allow long consent label to wrap; keep nowrap only for font-size radios --- */
+.left-pane label{white-space:normal}
+.font-size-options label{white-space:nowrap}
+
+</style>
+</head>
+<body>
+  <div class="container"><div class="layout">
+    <div class="card left-pane">
+<div class="left-grid">
+<div>
+      <span class="badge">Krok 1/1 – Dane do CV</span>
+      <h1>Zamów profesjonalne CV (PDF)</h1>
+      <p class="lead">Wypełnij pola poniżej. Każda nowa linia w <b>Doświadczeniu</b> i <b>Umiejętnościach</b> utworzy punkt wypunktowania.</p>
+
+      <form id="cvForm" method="POST" action="/api/send-cv" novalidate>
+        <div class="section">
+          <div class="section-title">Dane kontaktowe</div>
+          <div class="divider"></div>
+          <div class="row">
+            <div>
+              <label for="name">Imię i nazwisko <span class="req">*</span></label>
+              <input id="name" name="name" type="text" placeholder="np. Jan Kowalski" required minlength="2" maxlength="80" autocomplete="name">
+              <div class="hint">Wpisz pełne imię i nazwisko.</div>
+            </div>
+            <div>
+              <label for="position">Stanowisko / Nagłówek</label>
+              <input id="position" name="position" type="text" placeholder="np. Specjalista ds. Obsługi Klienta" maxlength="80" autocomplete="organization-title">
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label for="email">E-mail <span class="req">*</span></label>
+              <input id="email" name="email" type="email" placeholder="np. jan.kowalski@example.com" required autocomplete="email" inputmode="email">
+            </div>
+            <div>
+              <label for="phone">Telefon</label>
+              <input id="phone" name="phone" type="tel" placeholder="np. +48 600 000 000" autocomplete="tel" inputmode="tel" pattern="^[0-9+()\-\s]{6,}$">
+              <div class="hint">Dozwolone cyfry i symbole + ( ) -</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Zawartość CV</div>
+          <div class="divider"></div>
+          <label for="experience">Doświadczenie <span class="req">*</span></label>
+          <textarea id="experience" name="experience" placeholder="- Obsługa klienta (telefon/mail)
+- Wprowadzanie danych do Excel
+- Współpraca z zespołem sprzedaży" required></textarea>
+          <div class="hint">Każda linia = jeden punkt (•) w CV.</div>
+
+          <label for="education">Wykształcenie</label>
+          <textarea id="education" name="education" placeholder="np. 2019–2022 – Uniwersytet X, Kierunek Y, Specjalizacja Z"></textarea>
+
+          <label for="skills">Umiejętności <span class="req">*</span></label>
+          <textarea id="skills" name="skills" placeholder="- MS Excel, tworzenie tabel i filtrowanie
+- Komunikacja i obsługa klienta
+- Organizacja pracy" required></textarea>
+          <div class="hint">Każda linia = jeden punkt.</div>
+
+          <label for="languages">Języki</label>
+          <textarea id="languages" name="languages" placeholder="np. Polski – ojczysty; Angielski – B2"></textarea>
+
+          <label for="extra_info">Dodatkowe informacje (opcjonalnie)</label>
+          <textarea id="extra_info" name="extra_info" placeholder="np. Prawo jazdy kat. B, kursy, zainteresowania"></textarea>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Styl CV</div>
+          <div class="divider"></div>
+          <div class="row">
+            <div>
+              <label for="style">Wybierz styl</label>
+              <select id="style" name="style">
+                <option value="nowoczesne" selected>Nowoczesne</option>
+                <option value="klasyczne">Klasyczne</option>
+                <option value="techniczne">Techniczne</option>
+              </select>
+<div class="row" style="margin-top:10px">
+      <div>
+        <label>Rozmiar czcionki</label>
+        <div class="font-size-options" style="display:flex;gap:10px;align-items:center">
+          <label><input type="radio" name="fontSize" value="small"> Mały</label>
+          <label><input type="radio" name="fontSize" value="standard" checked> Standardowy</label>
+          <label><input type="radio" name="fontSize" value="large"> Duży</label>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <div>
+        <label for="contentAccent">Kolor tekstu (sekcje)</label>
+        <input type="color" id="contentAccent" name="contentAccent" value="#2c7be5">
+      </div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <div>
+        <label for="accent">Kolor akcentu</label>
+        <input type="color" id="accent" name="accent" value="#2c7be5">
+<div id="gradientControls" style="margin-top:10px;display:none">
+  <label for="gradStart">Gradient – kolor 1</label>
+  <input type="color" id="gradStart" name="gradStart" value="#2c7be5">
+  <div class="hint">Początek gradientu (tylko styl Nowoczesne).</div>
+  <label for="gradEnd" style="margin-top:10px">Gradient – kolor 2</label>
+  <input type="color" id="gradEnd" name="gradEnd" value="#6ac2ff">
+  <div class="hint">Koniec gradientu (tylko styl Nowoczesne).</div>
+</div>
+
+        <div class="hint">Wybierz kolor nagłówków i akcentów wizualnych.</div>
+      </div>
+      <div>
+        <label for="photo">Zdjęcie (opcjonalnie)</label>
+        <input type="file" id="photo" name="photo" accept="image/png,image/jpeg">
+        <div class="hint">Jeżeli nie dodasz zdjęcia, użyjemy neutralnej ikonki.</div>
+      </div>
+    </div>
+    
+              <div class="hint">Możesz wysłać formularz kilka razy, aby porównać style.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Zgody</div>
+          <div class="divider"></div>
+          <label class="note">
+            <input type="checkbox" id="rodo" name="rodo"> Wyrażam zgodę na przetwarzanie moich danych osobowych w celu przygotowania dokumentu CV.
+          </label>
+        </div>
+
+        <button type="submit" class="btn">Wyślij i odbierz PDF</button>
+        <div id="result"></div>
+      </form>
+</div>
+<div>
+
+</div>
+</div>
+      <p class="note" style="margin-top:8px">Po wysłaniu formularza otrzymasz PDF na podany adres e-mail.</p>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('cvForm');
+    const result = document.getElementById('result');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      // Basic client-side checks
+      if(!form.checkValidity()){
+        result.style.display = 'block';
+        result.style.background = '#ffecec';
+        result.style.border = '1px solid #ffb3b3';
+        result.textContent = 'Uzupełnij wymagane pola (imię i nazwisko, e-mail, doświadczenie, umiejętności).';
+        return;
+      }
+      const btn = form.querySelector('button[type="submit"]');
+      if (btn) { btn.disabled = true; btn.textContent = 'Wysyłanie…'; }
+      const data = Object.fromEntries(new FormData(form).entries());
+      // Read photo as dataURL if provided
+      const file = document.getElementById('photo')?.files?.[0];
+      if (file) {
+        data.photo = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      }
+      try {
+        const res = await fetch('/api/send-cv', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const out = await res.clone().json().catch(async()=>({ raw: await res.text() }));
+        result.style.display = 'block';
+        if (res.ok) {
+          result.style.background = '#e6ffed';
+          result.style.border = '1px solid #b6f2c2';
+          result.textContent = 'Sukces! Sprawdź skrzynkę e-mail – CV zostało wysłane jako PDF.';
+          form.reset();
+        } else {
+          result.style.background = '#ffecec';
+          result.style.border = '1px solid #ffb3b3';
+          result.textContent = 'Błąd: ' + (out.error || out.raw || 'nieznany błąd') + (out.details ? (' — ' + out.details) : '');
+        }
+      } catch (err) {
+        result.style.display = 'block';
+        result.style.background = '#ffecec';
+        result.style.border = '1px solid #ffb3b3';
+        result.textContent = 'Błąd połączenia. Spróbuj ponownie.';
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Wyślij i odbierz PDF'; }
+      }
+    });
+  
+    // Live preview
+    const pv = document.getElementById('livePreviewFixed');
+    function getVal(id){ return document.getElementById(id)?.value || ''; }
+    function getLines(id){ return getVal(id).split(/\r?\n/).map(s=>s.trim()).filter(Boolean); }
+    function selected(name){ const el=[...document.querySelectorAll('input[name="'+name+'"]')].find(e=>e.checked); return el?el.value:''; }
+    
+function buildPreview(){
+  const pv = document.getElementById('livePreviewFixed');
+  const payload = new FormData(document.getElementById('cvForm'));
+  const get = (k)=> (payload.get(k)||'').toString().trim();
+  const name = get('name'), position = get('position'), email = get('email'), phone = get('phone');
+  const experience = get('experience'), education = get('education'), languages = get('languages');
+  const skills = get('skills'), additional = (get('additional') || get('extra_info'));
+  const style = (get('style')||'nowoczesne').toLowerCase();
+  let accent = get('accent') || '#2c7be5';
+  const gradStart = get('gradStart') || accent;
+  const gradEnd = get('gradEnd') || accent;
+  const fontSize = (get('fontSize')||'standard').toLowerCase();
+  const contentAccent = get('contentAccent') || gradEnd || accent;
+  const scale = fontSize==='small'?0.9 : fontSize==='large'?1.12 : 1.0;
+  accent = gradEnd || accent;
+  // Badge update
+  const badgeEl = pv.parentElement.querySelector('.badge');
+  if (badgeEl){ badgeEl.textContent = style==='klasyczne' ? 'Klasyczne' : style==='techniczne' ? 'Techniczne' : 'Nowoczesne'; }
+
+  // Utilities
+  const splitLines = (txt)=> (txt?txt.split(/\r?\n/).filter(s=>s.trim()):[]);
+  const exp = splitLines(experience);
+  const skl = splitLines(skills);
+
+  const contact = [email, phone].filter(s=>s && s.trim()).join(' • ');
+// Style-specific previews
+  if(style==='klasyczne'){
+    pv.innerHTML = `
+      <div class="hdr" style="height:120px;border-bottom:1px solid #e5eef7;background:#fff">
+        <div style="padding-left:16px">
+          <div class="name" style="font-size:${24*scale}px;color:#111827">${name||'Imię i nazwisko'}</div>
+          <div class="role" style="font-size:${12*scale}px">${position||'Stanowisko / Specjalizacja'}</div>
+        </div>
+      </div>
+<div style=\"position:absolute;left:16px;top:90px;font-size:${10*scale}px;color:#6b7280\">${contact}</div>
+      <div class="main" style="left:0;width:100%;top:120px;padding:16px">
+        <div style="margin-bottom:8px;font-size:${10*scale}px;color:#6b7280">${[email||'e‑mail', phone||'telefon'].filter(Boolean).join(' • ')}</div>
+        <div class="sec">
+          <h4 style="color:${contentAccent};text-transform:uppercase;font-weight:700">Doświadczenie</h4>
+          <ul>${exp.map(s=>`<li style="font-size:${11*scale}px">${s}</li>`).join('')}</ul>
+        </div>
+        ${education?`<div class="sec"><h4 style="color:${contentAccent};text-transform:uppercase;font-weight:700">Wykształcenie</h4><div style="font-size:${11*scale}px">${education}</div></div>`:''}
+        ${languages?`<div class="sec"><h4 style="color:${contentAccent};text-transform:uppercase;font-weight:700">Języki</h4><div style="font-size:${11*scale}px">${languages}</div></div>`:''}
+        ${skills?`<div class="sec"><h4 style="color:${contentAccent};text-transform:uppercase;font-weight:700">Umiejętności</h4><ul>${skl.map(s=>`<li style="font-size:${11*scale}px">${s}</li>`).join('')}</ul></div>`:''}
+        ${additional?`<div class="sec"><h4 style="color:${contentAccent};text-transform:uppercase;font-weight:700">Dodatkowe informacje</h4><div style="font-size:${11*scale}px">${additional}</div></div>`:''}
+      </div>
+    `;
+  } else if (style==='techniczne'){
+    pv.innerHTML = `
+      <div style="position:absolute;left:0;top:0;right:0;height:80px;background:#111827;color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-weight:700;font-size:${18*scale}px;letter-spacing:.5px">${name||'IMIĘ I NAZWISKO'}</div>
+          <div style="opacity:.85;font-size:${11*scale}px">${position||'STANOWISKO / SPECJALIZACJA'}</div>
+        </div>
+<div style=\"position:absolute;right:16px;top:56px;font-size:${10*scale}px;opacity:.8\">${contact}</div>
+        <div style="text-align:right;font-size:${10*scale}px;opacity:.9">${[email||'e‑mail', phone||'telefon'].filter(Boolean).join(' • ')}</div>
+      </div>
+      <div class="main" style="position:absolute;left:0;top:80px;bottom:0;width:70%;padding:12px 16px">
+        <div style="border-left:3px solid ${contentAccent};padding-left:10px;margin-bottom:8px">
+          <div style="font-weight:700;font-size:${12*scale}px;color:${contentAccent}">DOŚWIADCZENIE</div>
+          <ul style="margin-top:6px">${exp.map(s=>`<li style="font-size:${11*scale}px">${s}</li>`).join('')}</ul>
+        </div>
+        ${education?`<div style="border-left:3px solid ${contentAccent};padding-left:10px;margin-bottom:8px"><div style="font-weight:700;font-size:${12*scale}px;color:${contentAccent}">WYKSZTAŁCENIE</div><div style="font-size:${11*scale}px">${education}</div></div>`:''}
+        ${additional?`<div style="border-left:3px solid ${contentAccent};padding-left:10px;margin-bottom:8px"><div style="font-weight:700;font-size:${12*scale}px;color:${contentAccent}">DODATKOWE</div><div style="font-size:${11*scale}px">${additional}</div></div>`:''}
+      </div>
+      <div class="sidebar" style="position:absolute;right:0;top:80px;bottom:0;width:30%;background:#f8fafc;border-left:1px solid #e5eef7;padding:12px 14px">
+        <div style="font-weight:700;font-size:${12*scale}px;margin-bottom:6px;color:${contentAccent}">UMIEJĘTNOŚCI</div>
+        <ul style="margin-top:6px">${skl.map(s=>`<li style="font-size:${11*scale}px">${s}</li>`).join('')}</ul>
+        ${languages?`<div style="margin-top:10px"><div style="font-weight:700;font-size:${12*scale}px;color:${contentAccent}">JĘZYKI</div><div style="font-size:${11*scale}px">${languages}</div></div>`:''}
+      </div>
+    `;
+  } else {
+    
+    // nowoczesne (PDF-matched layout)
+    pv.innerHTML = `
+      <div class="cv-now" style="--accent:${contentAccent};--muted:#6b7280;--line:#e5eef7;color:#111827">
+        <div class="hdr" style="height:90px;background:linear-gradient(90deg, ${gradStart} 0%, ${gradEnd} 100%);color:#fff;border-top-left-radius:12px;border-top-right-radius:12px">
+          <div style="padding-left:16px;padding-top:16px">
+            <div class="name" style="font-size:${26*scale}px;font-weight:700;letter-spacing:.2px">${name||'Imię i nazwisko'}</div>
+            <div class="role" style="font-size:${12*scale}px;opacity:.92">${position||'Stanowisko / Specjalizacja'}</div>
+          </div>
+        </div>
+        <div class="contact" style="padding:6px 16px;font-size:${10*scale}px;color:#6b7280;border-bottom:1px solid var(--line)">${contact||""}</div>
+        <div class="body" style="display:grid;grid-template-columns:220px 1fr;gap:24px;padding:16px">
+          <div class="left" style="background:#f0f6ff;border:1px solid var(--line);padding:12px 14px;border-radius:8px">
+            <div style="font-weight:700;color:${contentAccent};text-transform:uppercase;margin-bottom:8px">Kontakt</div>
+            ${email?`<div style="color:var(--muted);font-weight:600">Email</div>`:''}
+            ${email?`<div style="margin-bottom:8px">${email}</div>`:''}
+            ${phone?`<div style="color:var(--muted);font-weight:600">Telefon</div>`:''}
+            ${phone?`<div style="margin-bottom:8px">${phone}</div>`:''}
+            <div style="height:1px;background:var(--line);margin:10px 0"></div>
+            ${skl.length?`<div style="font-weight:700;color:${contentAccent};text-transform:uppercase;margin-bottom:6px">Umiejętności</div>`:''}
+            ${skl.length?`<ul style="margin:0;padding-left:18px">${skl.map(s=>`<li style="font-size:${11*scale}px">${s}</li>`).join('')}</ul>`:''}
+          </div>
+          <div class="right">
+            ${additional?`<div class="sec" style="margin-bottom:10px">
+              <div style="color:${contentAccent};text-transform:uppercase;font-weight:700">Podsumowanie</div>
+              <div style="height:1px;background:var(--line);margin:6px 0"></div>
+              <div style="font-size:${11*scale}px">${additional}</div>
+            </div>`:''}
+            <div class="sec" style="margin-bottom:10px">
+              <div style="color:${contentAccent};text-transform:uppercase;font-weight:700">Doświadczenie</div>
+              <div style="height:1px;background:var(--line);margin:6px 0"></div>
+              <ul style="margin:0;padding-left:18px">${exp.map(s=>`<li style="font-size:${11*scale}px">${s}</li>`).join('')}</ul>
+            </div>
+            <div class="sec" style="margin-bottom:10px">
+              <div style="color:${contentAccent};text-transform:uppercase;font-weight:700">Wykształcenie</div>
+              <div style="height:1px;background:var(--line);margin:6px 0"></div>
+              <div style="font-size:${11*scale}px">${education||''}</div>
+            </div>
+            <div class="sec" style="margin-bottom:10px">
+              <div style="color:${contentAccent};text-transform:uppercase;font-weight:700">Języki</div>
+              <div style="height:1px;background:var(--line);margin:6px 0"></div>
+              <div style="font-size:${11*scale}px">${languages||''}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+}
+['input','change','keyup'].forEach(ev=>document.getElementById('cvForm').addEventListener(ev, buildPreview));
+document.getElementById('style').addEventListener('change', updateColorControls);
+updateColorControls();
+buildPreview();
+
+  </script>
+
+<script>
+function updateColorControls(){
+  const styleSel = document.getElementById('style');
+  const gradientWrap = document.getElementById('gradientControls');
+  const contentAccentEl = document.getElementById('contentAccent');
+  const contentAccentLabel = document.querySelector('label[for="contentAccent"]');
+  const accentLabel = document.querySelector('label[for="accent"]');
+  const accentInput = document.getElementById('accent');
+  if(!styleSel || !gradientWrap) return;
+  const isNowo = styleSel.value.toLowerCase()==='nowoczesne';
+  gradientWrap.style.display = isNowo ? 'block' : 'none';
+  if (contentAccentEl) { contentAccentEl.style.display = ''; }
+  if (contentAccentLabel) { contentAccentLabel.style.display = ''; }
+  if (accentLabel) accentLabel.style.display = isNowo ? 'none' : '';
+  if (accentInput) accentInput.style.display = isNowo ? 'none' : '';
+}
+document.addEventListener('DOMContentLoaded', function(){
+  const styleSel = document.getElementById('style');
+  if (styleSel){
+    styleSel.addEventListener('change', updateColorControls);
+    updateColorControls();
+  }
+});
+</script>
+
+
+<div class="fixed-preview-panel">
+  <div class="preview-card card" style="padding:16px">
+    
+    <div id="livePreviewFixed" style="background:#fff;border:1px solid var(--border);border-radius:14px;position:relative;box-shadow:0 6px 18px rgba(0,0,0,.06);height:100%"></div>
+    <div class="note" style="margin-top:10px;font-size:12px;color:var(--muted)">Podgląd ma charakter poglądowy, PDF może minimalnie różnić się układem.</div>
+  </div>
+</div>
+
+</body>
+</html>

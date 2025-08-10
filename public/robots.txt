@@ -1,0 +1,3 @@
+Sitemap: https://szybkiecv24h.vercel.app/sitemap.xml
+User-agent: *
+Allow: /
